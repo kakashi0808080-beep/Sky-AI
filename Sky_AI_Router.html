@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10131c"><title>Sky AI</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1018;--panel:#151a26;--panel2:#1b2231;--line:#293247;--txt:#edf2ff;--muted:#9ba8c1;--accent:#8b7cff;--accent2:#54d6c7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#202344 0,transparent 45%),var(--bg);color:var(--txt);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif;height:100dvh;display:flex;justify-content:center}
+.app{width:100%;max-width:900px;height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom)}
+header{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--line)}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#8b7cff,#54d6c7);display:grid;place-items:center;color:#10131c;font-weight:900;font-size:22px;box-shadow:0 5px 24px #7468ff44}.brand{font-size:19px;font-weight:800}.sub{font-size:12px;color:var(--muted)}.spacer{flex:1}.status{font-size:11px;color:var(--accent2);display:flex;align-items:center;gap:6px}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.toolbar{display:flex;gap:8px;padding:10px 0;align-items:center}.toolbar select,.toolbar button{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:11px;padding:9px 11px;font:inherit;font-size:13px}.toolbar select{flex:1;min-width:0}.toolbar button{cursor:pointer}
+.chat{flex:1;overflow:auto;padding:10px 2px 20px;scroll-behavior:smooth}.welcome{text-align:center;margin:10vh auto 0;max-width:480px}.orb{width:72px;height:72px;border-radius:24px;background:linear-gradient(135deg,#8b7cff,#54d6c7);display:grid;place-items:center;color:#10131c;font-size:34px;font-weight:900;margin:0 auto 18px;box-shadow:0 10px 50px #7468ff44}.welcome h1{font-size:27px;margin:0 0 8px}.welcome p{color:var(--muted);line-height:1.5}.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:22px}.chip{border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:20px;padding:9px 13px;font-size:13px}
+.msg{display:flex;margin:14px 0;gap:9px;align-items:flex-start}.avatar{width:30px;height:30px;flex:none;border-radius:10px;background:var(--panel2);display:grid;place-items:center;font-size:13px}.msg.user{flex-direction:row-reverse}.msg.user .avatar{background:#39325f}.bubble{max-width:min(82%,680px);padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:var(--panel);line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}.msg.user .bubble{background:#292647;border-color:#4a4278}.meta{font-size:11px;color:var(--muted);margin-bottom:5px}.typing{color:var(--muted);font-size:13px;padding:8px 4px}
+.composer{border-top:1px solid var(--line);padding:12px 0 8px}.inputrow{display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:8px;align-items:flex-end}.inputrow textarea{flex:1;resize:none;max-height:140px;min-height:42px;background:transparent;border:0;outline:0;color:var(--txt);font:inherit;padding:10px 6px}.send{width:43px;height:43px;border:0;border-radius:13px;background:linear-gradient(135deg,#8b7cff,#54d6c7);color:#10131c;font-size:20px;font-weight:900}.send:disabled{opacity:.45}.hint{text-align:center;color:#7f8aa2;font-size:11px;padding:8px 4px 4px}.notice{font-size:11px;color:#8e9ab2;line-height:1.45;padding:7px 4px}.memory-panel{position:fixed;inset:0;background:#05070bcc;display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}.memory-card{width:min(100%,620px);max-height:80dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}.memory-card h2{margin:0 0 8px}.memory-item{padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.45}.memory-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}.memory-actions button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px}.brainbar{display:flex;gap:8px;padding:0 0 8px;align-items:center}.brainbar button{background:#182536;color:var(--txt);border:1px solid #34506a;border-radius:10px;padding:8px 10px;font:inherit;font-size:12px}.brainbar small{color:var(--muted);font-size:11px}.hidden{display:none!important}.settings-panel{position:fixed;inset:0;background:#05070bcc;z-index:20;display:flex;align-items:center;justify-content:center;padding:14px}.settings-card{width:min(100%,650px);max-height:88dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px}.settings-card h2{margin:0 0 8px}.settings-card h3{margin:18px 0 7px;font-size:15px}.settings-card p,.settings-card small{color:var(--muted);line-height:1.45}.settings-card input,.settings-card textarea,.settings-card select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--txt);font:inherit;margin:5px 0}.settings-card button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:4px 4px 4px 0}.settings-row{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.settings-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.logline{font-size:12px;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}.provider-note{font-size:12px;color:var(--muted);line-height:1.45}.provider-card{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.provider-card label{font-size:12px;color:var(--muted)}
+@media(min-width:650px){.app{padding-left:22px;padding-right:22px}.bubble{font-size:15px}}
+</style><script src="https://js.puter.com/v2/"></script>
+</head>
+<body><main class="app">
+<header><div class="logo">S</div><div><div class="brand">Sky AI</div><div class="sub">Твой бесплатный ИИ-помощник</div></div><div class="spacer"></div><div class="status" id="status"><span class="dot"></span><span>готов</span></div></header>
+<div class="toolbar"><button id="wikiinfo" type="button">📚 База знаний</button><button id="memorybtn" type="button">🧠 Память</button><button id="newchat">Новый чат</button><button id="settingsbtn">⚙️ Модули</button></div>
+<div class="brainbar"><button id="loadLocal" type="button">🧠 Проверить локальный мозг</button><button id="googleSearch" type="button">🌐 Поиск Google</button><select id="modeSel" style="background:#182536;color:var(--txt);border:1px solid #34506a;border-radius:10px;padding:7px 8px;font-size:12px"><option value="fast">⚡ Fast</option><option value="normal">Normal</option><option value="max">🧠 Max</option></select><small id="brainStatus">Облачный ИИ · локальная модель ещё не загружена</small></div><section class="chat" id="chat"><div class="welcome" id="welcome"><div class="orb">S</div><h1>Привет, я Sky.</h1><p>Напиши мне что угодно. Я сам подключаю нужных специалистов внутри и отвечаю одним сообщением. Для исследований есть поиск по Википедии и общая память знаний.</p><div class="chips"><button class="chip" data-prompt="Привет! Давай познакомимся.">👋 Поздороваться</button><button class="chip" data-prompt="Помоги написать программу на JavaScript.">💻 Написать код</button><button class="chip" data-prompt="Объясни сложную тему простыми словами.">🧠 Объяснить тему</button></div></div></section>
+<div class="composer"><div class="inputrow"><textarea id="input" rows="1" placeholder="Напиши сообщение Sky…"></textarea><button class="send" id="send" aria-label="Отправить">➤</button></div><div class="hint">Enter — отправить · Shift + Enter — новая строка</div><div class="notice">Внутри работает скрытая команда специалистов: Sky сам распределяет задачи и собирает один ответ. Агентам не нужны отдельные ключи — они используют общий ИИ-мозг. Бесплатные облачные ИИ подключаются сами, без ключей и входа; локальная модель работает без ключей после загрузки, если браузер поддерживает WebGPU. Память хранится в браузере телефона.</div></div>
+</main>
+<script>
+(()=>{
+const chat=document.getElementById('chat'),welcome=document.getElementById('welcome'),input=document.getElementById('input'),send=document.getElementById('send'),status=document.getElementById('status');
+let history=[];try{history=JSON.parse(localStorage.getItem('sky_chat_v1')||'[]')}catch{}
+let memory=[];try{memory=JSON.parse(localStorage.getItem('sky_memory_v1')||'[]')}catch{}
+let localEngine=null, localModelLoading=false;
+function saveMemory(){try{localStorage.setItem('sky_memory_v1',JSON.stringify(memory.slice(-250)));if(navigator.storage?.persist)navigator.storage.persist().catch(()=>{});}catch{}}
+function remember(item){const key=(item.title||item.query||'').toLowerCase().replace(/\s+/g,' ').trim();if(!key)return;const old=memory.findIndex(x=>(x.title||x.query||'').toLowerCase().replace(/\s+/g,' ').trim()===key);const entry={...item,savedAt:new Date().toLocaleString('ru-RU')};if(old>=0)memory[old]=entry;else memory.push(entry);memory=memory.slice(-250);saveMemory();}
+const roles={
+general:'Ты Sky — дружелюбный универсальный ИИ-помощник. Отвечай на русском, будь честным и полезным.',
+coder:'Ты агент-программист. Проектируй, пиши, объясняй и отлаживай код. Проверяй крайние случаи, не утверждай, что запускал код, если не запускал.',
+researcher:'Ты агент-исследователь. Ищи и систематизируй сведения, используй переданные источники, отделяй факты от предположений, указывай ограничения поиска.',
+analyst:'Ты агент-аналитик. Разбивай задачу, сравнивай варианты, выявляй закономерности и неопределённость, обосновывай выводы.',
+chatgpt_analyst:'Ты аналитический агент Sky с сильным уровнем рассуждения. Выявляй скрытые допущения, проверяй логику, сравнивай варианты, рассчитывай только по имеющимся данным и ясно обозначай неопределённость. Ты не являешься отдельным подключением к ChatGPT: это роль общей модели Sky.',
+critic:'Ты независимый проверяющий. Ищи ошибки, противоречия, неполноту и сомнительные утверждения. Предлагай конкретные исправления, не придирайся без причины.',
+architect:'Ты системный архитектор. Превращай идеи в понятную архитектуру: компоненты, связи, потоки данных, этапы реализации, риски и простые решения. Учитывай ограничения Android и браузера, если они относятся к задаче.',
+teacher:'Ты терпеливый преподаватель. Объясняй от простого к сложному, приводи понятные примеры, проверяй понимание и не перегружай терминами. Подстраивайся под уровень пользователя.',
+writer:'Ты редактор и автор. Пиши естественно, ясно и грамотно, сохраняя желаемый стиль пользователя. Убирай воду, не меняй смысл без просьбы.',
+math:'Ты математик и специалист по расчётам. Показывай формулу, ход вычислений и единицы измерения. Перепроверяй арифметику и явно отмечай допущения.',
+security:'Ты специалист по цифровой безопасности. Ищи уязвимости, риски приватности и небезопасные настройки. Предлагай защитные меры; не помогай взламывать чужие системы.',
+planner:'Ты планировщик проектов. Разбивай большую цель на выполнимые этапы, зависимости, приоритеты и критерии готовности. Предлагай реалистичный следующий шаг.',
+librarian:'Ты хранитель базы знаний Sky. Выделяй долговечные факты, определения и выводы; отличай проверенное от предположений; не дублируй сведения и всегда сохраняй источник, если он дан.',
+tester:'Ты инженер по тестированию. Составляй тест-кейсы, проверяй крайние случаи, воспроизводимость, регрессии и критерии приёмки. Не утверждай, что реально запускал тесты, если этого не делал.',
+android:'Ты Android-инженер. Учитывай Kotlin/Java, Android SDK, разрешения, жизненный цикл, ограничения фоновой работы, совместимость устройств и безопасность.',
+automation:'Ты инженер автоматизации. Проектируй надёжные сценарии, триггеры, расписания, обработку ошибок и подтверждения пользователя. Не обещай фоновое выполнение в браузере.',
+data:'Ты специалист по данным. Помогай с таблицами, структурированием, очисткой, SQL, статистикой и визуализацией; проверяй качество исходных данных.',
+creative:'Ты креативный специалист. Предлагай оригинальные идеи, концепции, названия и сценарии, соблюдая запрос и практические ограничения.',
+factchecker:'Ты фактчекер. Разделяй проверенные факты, выводы и неизвестное; отмечай дату актуальности и требуй источники для спорных утверждений.',
+team:'Ты координатор совета агентов Sky. Рассмотри запрос с нескольких независимых профессиональных точек зрения: исследователь, аналитик, программист/архитектор (если уместно), проверяющий и практический планировщик. Затем сведи их мнения в один согласованный ответ. Не изображай отдельные реальные нейросети и не выдумывай, что агенты запускались параллельно: это несколько ролей одной модели.'
+};
+function save(){try{localStorage.setItem('sky_chat_v1',JSON.stringify(history.slice(-60)))}catch{}}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function add(role,text){welcome.classList.add('hidden');const row=document.createElement('div');row.className='msg '+(role==='user'?'user':'');const av=document.createElement('div');av.className='avatar';av.textContent=role==='user'?'Я':'S';const b=document.createElement('div');b.className='bubble';b.textContent=text;row.append(av,b);chat.append(row);chat.scrollTop=chat.scrollHeight;return row}
+function render(){if(!history.length)return;welcome.classList.add('hidden');history.forEach(m=>add(m.role,m.content))}
+function setStatus(t){status.lastElementChild.textContent=t}
+async function searchWikipedia(query){
+  const clean=query.replace(/\s+/g,' ').trim().slice(0,180);
+  if(!clean)return [];
+  const endpoint='https://ru.wikipedia.org/w/api.php?origin=*&action=query&list=search&srsearch='+encodeURIComponent(clean)+'&format=json&srlimit=3';
+  const r=await fetch(endpoint,{headers:{'Accept':'application/json'}});
+  if(!r.ok)throw new Error('Википедия ответила '+r.status);
+  const data=await r.json();
+  const hits=data.query?.search||[];
+  const pages=[];
+  for(const hit of hits.slice(0,3)){
+    const url='https://ru.wikipedia.org/w/api.php?origin=*&action=query&prop=extracts&explaintext=1&exintro=1&exchars=1800&pageids='+hit.pageid+'&format=json';
+    try{
+      const pr=await fetch(url); if(!pr.ok)continue;
+      const pd=await pr.json(); const page=pd.query?.pages?.[hit.pageid];
+      if(page?.extract)pages.push({title:hit.title,extract:page.extract,url:'https://ru.wikipedia.org/wiki/'+encodeURIComponent(hit.title.replace(/ /g,'_'))});
+    }catch{}
+  }
+  return pages;
+}
+function chooseAgents(q){
+  const t=q.toLowerCase(), picked=['coordinator'];
+  const add=(id)=>{if(!picked.includes(id))picked.push(id)};
+  if(/код|программ|сайт|html|css|javascript|python|ошибк|скрипт|приложен|разработ|почин|исправь/i.test(t))add('coder');
+  if(/найди|поищи|поиск|исслед|источник|википед|кто такой|кто такая|что такое|расскажи о|расскажи про|истори|биограф|сейчас|последн|новост|сегодня|актуальн/i.test(t))add('researcher');
+  if(/анализ|сравни|плюс|минус|выгод|почему|причин|оцени|разбер|стратег|данн|таблиц/i.test(t))add('analyst');
+  if(/сколько|посчитай|вычисл|математ|процент|формул|уравнен|расстояни|скорост|весит/i.test(t))add('math');
+  if(/план|этап|расписан|организ|цель|проект/i.test(t))add('planner');
+  if(/объясни|научи|как работает|простыми словами|пример/i.test(t))add('teacher');
+  if(/текст|напиши|сочин|письмо|переведи|перепиши|описание|пост/i.test(t))add('writer');
+  if(/безопас|защит|парол|взлом|уязвим|приватност/i.test(t))add('security');
+  if(/архитектур|структур|систем|спроектир/i.test(t))add('architect');
+  if(/тест|проверь код|проверка приложения|регресси/i.test(t))add('tester');
+  if(/android|андроид|apk|телефон|разрешени/i.test(t))add('android');
+  if(/автоматизац|расписани|по таймеру|повторяющ/i.test(t))add('automation');
+  if(/таблиц|csv|excel|данн|статистик|sql/i.test(t))add('data');
+  if(/идея|дизайн|назван|сценар|креатив|придумай/i.test(t))add('creative');
+  if(/факт|достовер|источник|правда ли|проверь информацию/i.test(t))add('factchecker');
+  if(/проверь|провер|ошибк|точно ли|правда ли|достовер/i.test(t))add('critic');
+  if(t.length>100 || /сложн|подробно|по шагам|с нуля|полностью|сделай проект/i.test(t)){add('analyst');add('critic');}
+  return picked.slice(0,5);
+}
+function wantsWiki(q,agents){
+  if(agents.includes('researcher'))return true;
+  return /(найди|поищи|поиск|исследуй|проверь|источник|википед|кто такой|кто такая|что такое|расскажи о|расскажи про|истори[яюи]|биографи|где находится|когда произош|почему произош|объясни.*(теори|учен|событи|страна|город|личност))/i.test(q);
+}
+function agentBrief(ids){
+ const names={coordinator:'Главный координатор: пойми намерение пользователя, выбери лучший порядок работы и собери единый ответ.',coder:roles.coder,researcher:roles.researcher,analyst:roles.analyst,math:roles.math,planner:roles.planner,teacher:roles.teacher,writer:roles.writer,security:roles.security,architect:roles.architect,critic:roles.critic,chatgpt_analyst:roles.chatgpt_analyst,librarian:roles.librarian,tester:roles.tester,android:roles.android,automation:roles.automation,data:roles.data,creative:roles.creative,factchecker:roles.factchecker};
+ return ids.map(id=>'• '+id+': '+names[id]).join('\n');
+}
+async function loadLocalBrain(){if(localEngine||localModelLoading)return;const btn=document.getElementById('loadLocal'),bs=document.getElementById('brainStatus');if(!navigator.gpu){bs.textContent='WebGPU недоступен · локальный запуск в этом браузере невозможен';alert('В этом Chrome нет доступа к WebGPU. Локальная модель здесь не запустится.');return;}localModelLoading=true;btn.disabled=true;btn.textContent='⏳ Проверяю устройство…';bs.textContent='Проверяю ограничения видеоускорителя…';try{const adapter=await navigator.gpu.requestAdapter();if(!adapter)throw new Error('Браузер не смог получить GPU-адаптер.');const limit=adapter.limits.maxComputeWorkgroupStorageSize||0;if(limit<32768){bs.textContent='Локальная модель несовместима с текущим WebGPU · лимит '+limit+' байт';btn.textContent='Локальная модель недоступна';alert('Проверка завершена. Устройство сообщает maxComputeWorkgroupStorageSize='+limit+' байт, а текущая сборка WebLLM требует 32768 байт. Это ограничение WebGPU/драйвера, а не нехватка места для скачивания. Повторная загрузка той же модели не поможет. Sky может продолжать работать через облачный режим. Для настоящей локальной модели на Android понадобится отдельное Android-приложение с нативным движком, а не HTML в Chrome.');return;}btn.textContent='⏳ Загружаю модель…';bs.textContent='Загружаю локальную модель (первый запуск)…';const mod=await import('https://esm.run/@mlc-ai/web-llm');const model='SmolLM2-360M-Instruct-q4f16_1-MLC';localEngine=await mod.CreateMLCEngine(model,{initProgressCallback:(p)=>{const t=p.text||'Загрузка модели…';bs.textContent=t.slice(0,90);btn.textContent='⏳ '+Math.round((p.progress||0)*100)+'%';}});bs.textContent='Локальный мозг загружен · может работать без интернета';btn.textContent='🧠 Локальный мозг готов';setStatus('локально');}catch(e){localEngine=null;bs.textContent='Локальная модель недоступна: '+(e.message||e).toString().slice(0,100);btn.textContent='Повторить проверку';alert('Не удалось запустить локальную модель: '+(e.message||e)+'. Если ошибка связана с лимитом WebGPU, смена размера модели сама по себе её не исправит.');}finally{localModelLoading=false;btn.disabled=false;}}
+async function localChat(prompt){const msgs=[{role:'system',content:'Ты Sky, единый русскоязычный ИИ-помощник с внутренней командой специалистов. Следуй инструкциям координации из сообщения пользователя, отвечай одним цельным ответом и не показывай внутреннюю команду.'},{role:'user',content:prompt}];const r=await localEngine.chat.completions.create({messages:msgs,temperature:0.7,max_tokens:500});return r.choices?.[0]?.message?.content||'';}
+function responseText(result){
+  if(typeof result==='string')return result;
+  if(result?.message?.content){const c=result.message.content;return Array.isArray(c)?c.map(x=>x.text||'').join('\n'):String(c)}
+  if(result?.content){const c=result.content;return Array.isArray(c)?c.map(x=>x.text||'').join('\n'):String(c)}
+  if(result?.text)return String(result.text);
+  return '';
+}
+function showMemory(){
+ const panel=document.createElement('div');panel.className='memory-panel';
+ const card=document.createElement('div');card.className='memory-card';
+ const title=document.createElement('h2');title.textContent='🧠 Память Sky · '+memory.length+' записей';card.append(title);
+ const desc=document.createElement('div');desc.className='sub';desc.textContent='Сохранено в хранилище браузера на этом телефоне. Sky использует эти записи в следующих ответах. Экспортируй резервную копию, чтобы не потерять память при очистке браузера.';card.append(desc);
+ if(!memory.length){const empty=document.createElement('p');empty.textContent='Пока память пустая. Попроси Sky изучить тему или найти информацию.';card.append(empty)}
+ memory.slice().reverse().forEach(item=>{const el=document.createElement('div');el.className='memory-item';const strong=document.createElement('b');strong.textContent=item.title||item.query;el.append(strong);const body=document.createElement('div');body.textContent=(item.summary||item.extract||'').slice(0,650);el.append(body);if(item.url){const a=document.createElement('a');a.href=item.url;a.target='_blank';a.rel='noopener';a.textContent='Источник';a.style.color='#8b7cff';el.append(a)}card.append(el)});
+ const actions=document.createElement('div');actions.className='memory-actions';const backup=document.createElement('button');backup.textContent='Экспорт памяти';backup.onclick=()=>{const blob=new Blob([JSON.stringify(memory,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Sky_memory_backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};const clear=document.createElement('button');clear.textContent='Очистить память';clear.onclick=()=>{if(confirm('Удалить все сохранённые знания Sky?')){memory=[];saveMemory();panel.remove()}};const close=document.createElement('button');close.textContent='Закрыть';close.onclick=()=>panel.remove();actions.append(backup,clear,close);card.append(actions);panel.append(card);panel.addEventListener('click',e=>{if(e.target===panel)panel.remove()});document.body.append(panel);
+}
+document.getElementById('memorybtn').addEventListener('click',showMemory);
+document.getElementById('loadLocal').addEventListener('click',loadLocalBrain);
+document.getElementById('googleSearch').addEventListener('click',()=>{const q=input.value.trim();if(!q){alert('Сначала напиши тему для поиска в поле сообщения.');return;}window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener');});
+document.getElementById('wikiinfo').addEventListener('click',()=>{
+  alert('📚 База знаний Sky подключена к русской Википедии. В режиме «Исследователь» и в вопросах о фактах Sky автоматически ищет статьи и передаёт выдержки ИИ. Википедия — справочный источник, важные факты стоит перепроверять.');
+});
+
+// MCP and automation controls. MCP server connections require a reachable MCP-compatible
+// endpoint and browser CORS support; this UI stores configuration only, never secrets.
+let mcpServers=[];try{mcpServers=JSON.parse(localStorage.getItem('sky_mcp_servers_v1')||'[]')}catch{}
+let automations=[];try{automations=JSON.parse(localStorage.getItem('sky_automations_v1')||'[]')}catch{}
+let automationTimers=[];
+function saveModules(){try{localStorage.setItem('sky_mcp_servers_v1',JSON.stringify(mcpServers));localStorage.setItem('sky_automations_v1',JSON.stringify(automations));}catch{}}
+let freeProviders=[];try{freeProviders=JSON.parse(localStorage.getItem('sky_free_providers_v1')||'[]')}catch{}
+function saveFreeProviders(){try{localStorage.setItem('sky_free_providers_v1',JSON.stringify(freeProviders))}catch{}}
+function specialistFor(q,agents){const t=q.toLowerCase();if(agents.includes('coder'))return 'coder';if(agents.includes('android'))return 'android';if(agents.includes('math'))return 'math';if(agents.includes('researcher'))return 'researcher';if(agents.includes('data'))return 'data';if(agents.includes('security'))return 'security';if(agents.includes('writer'))return 'writer';if(agents.includes('creative'))return 'creative';if(agents.includes('analyst'))return 'analyst';return 'general'}
+function providerOrder(skill){const prefs={coder:['groq','openrouter','gemini'],android:['groq','gemini','openrouter'],math:['gemini','groq','openrouter'],researcher:['gemini','openrouter','groq'],data:['gemini','groq','openrouter'],security:['groq','gemini','openrouter'],writer:['gemini','openrouter','groq'],creative:['gemini','openrouter','groq'],analyst:['openrouter','gemini','groq'],general:['gemini','groq','openrouter']};return (prefs[skill]||prefs.general).map(id=>freeProviders.find(p=>p.id===id&&p.enabled&&p.key)).filter(Boolean)}
+async function callKeyedModel(prompt,skill){
+ const list=providerOrder(skill);let errors=[];
+ for(const p of list){try{
+   let response,body;
+   if(p.id==='gemini'){
+     const model=p.model||'gemini-2.5-flash';
+     response=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent?key='+encodeURIComponent(p.key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.65,maxOutputTokens:1800}})});
+     body=await response.json();if(!response.ok)throw new Error(body.error?.message||('HTTP '+response.status));
+     const out=body.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('\n')||'';if(!out)throw new Error('Пустой ответ модели');return {text:out,provider:p.id,model};
+   } else {
+     const model=p.model||(p.id==='groq'?'openai/gpt-oss-120b':'openrouter/free');
+     const base=p.id==='groq'?'https://api.groq.com/openai/v1/chat/completions':'https://openrouter.ai/api/v1/chat/completions';
+     response=await fetch(base,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+p.key},body:JSON.stringify({model,messages:[{role:'system',content:'Ты Sky, единый русскоязычный помощник. Выполни задачу с учётом указанных ролей специалистов. Не выдумывай факты, источники и выполненные действия.'},{role:'user',content:prompt}],temperature:0.65,max_tokens:1800})});
+     body=await response.json();if(!response.ok)throw new Error(body.error?.message||('HTTP '+response.status));
+     const out=body.choices?.[0]?.message?.content||'';if(!out)throw new Error('Пустой ответ модели');return {text:out,provider:p.id,model};
+   }
+ }catch(e){errors.push(p.id+': '+(e.message||'ошибка'));}}
+ if(list.length)throw new Error('Все подключённые бесплатные модели временно недоступны. '+errors.join(' | '));
+ return null;
+}
+
+const KEYLESS=[
+ {id:'ovh',name:'OVHcloud',base:'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1',key:'',gap:31000,strong:/qwen3\.5-397|gpt-oss-120|llama-3[._]3-70|qwen.*(72|32)b/i,fast:/mistral|nemo|llama|gpt-oss/i},
+ {id:'kilo',name:'Kilo Gateway',bases:['https://api.kilo.ai/api/gateway','https://ai-gateway.kilo.ai/api/v1'],key:'',free:true,strong:/nemotron|reflection|gpt-oss-120|qwen|deepseek|glm|kimi/i,fast:/lightning|nano|flash|20b|mini/i},
+ {id:'llm7',name:'LLM7',base:'https://api.llm7.io/v1',key:'unused',strong:/gpt-oss-120|deepseek|qwen|glm|minimax|mistral/i,fast:/gpt-oss-20|nemo|mini|flash/i},
+ {id:'polli',name:'Pollinations',base:'https://text.pollinations.ai/openai',nolist:true,model:'openai',key:'',gap:16000}
+];
+let rs={};try{rs=JSON.parse(localStorage.getItem('sky_router_v1')||'{}')}catch{}
+function rsSave(){try{localStorage.setItem('sky_router_v1',JSON.stringify(rs))}catch{}}
+function st(id){return rs[id]||(rs[id]={until:0,fails:0,ok:0,models:[],mt:0,bad:[],last:'',err:'',base:''})}
+let skyMode=localStorage.getItem('sky_mode_v1')||'normal';
+const modeSel=document.getElementById('modeSel');if(modeSel){modeSel.value=skyMode;modeSel.addEventListener('change',()=>{skyMode=modeSel.value;try{localStorage.setItem('sky_mode_v1',skyMode)}catch{}})}
+function hdr(p){const h={'Content-Type':'application/json'};if(p.key)h.Authorization='Bearer '+p.key;return h}
+async function tmo(url,opt,ms){const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);try{return await fetch(url,{...opt,signal:c.signal})}finally{clearTimeout(t)}}
+function netErr(e){if(e.status)return e;const x=new Error(e.name==='AbortError'?'не ответил вовремя':'нет связи или браузер блокирует доступ (CORS)');x.name=e.name;return x}
+async function listModels(p){
+ const s=st(p.id);if(p.nolist)return [p.model];
+ if(s.models.length&&Date.now()-s.mt<3600000)return s.models;
+ let last;
+ for(const b of (p.bases||[p.base])){try{
+  const r=await tmo(b+'/models',{headers:hdr(p)},12000);if(!r.ok){const e=new Error('HTTP '+r.status);e.status=r.status;throw e}
+  const j=await r.json();
+  let ids=(j.data||j.models||[]).filter(m=>!(p.free&&m.pricing&&Number(m.pricing.prompt)>0)).map(m=>m.id||m.name).filter(Boolean).filter(id=>!/embed|whisper|tts|image|rerank|moderation/i.test(id));
+  if(p.free){const f=ids.filter(i=>/free/i.test(i));if(f.length)ids=f}
+  if(!ids.length)throw new Error('нет моделей');
+  s.models=ids;s.mt=Date.now();s.base=b;rsSave();return ids;
+ }catch(e){last=netErr(e)}}
+ throw last||new Error('нет связи');
+}
+function pick(p,ids,tier){const s=st(p.id),ok=ids.filter(i=>!s.bad.includes(i)),re=tier==='strong'?p.strong:p.fast;return ok.find(i=>re&&re.test(i))||ok[0]}
+async function callProvider(p,prompt,tier){
+ const ids=await listModels(p),s=st(p.id);
+ for(let k=0;k<3;k++){
+  const model=p.nolist?p.model:pick(p,ids,tier);if(!model)throw new Error('нет подходящей модели');
+  const b=s.base||(p.bases||[p.base])[0];let r;
+  try{r=await tmo(b+'/chat/completions',{method:'POST',headers:hdr(p),body:JSON.stringify({model,messages:[{role:'system',content:'Ты Sky, единый русскоязычный помощник. Выполни задачу с учётом указанных ролей специалистов. Не выдумывай факты, источники и выполненные действия.'},{role:'user',content:prompt}],temperature:0.65,max_tokens:1800})},60000)}catch(e){throw netErr(e)}
+  if(!r.ok){const e=new Error('HTTP '+r.status);e.status=r.status;if((r.status===400||r.status===404||r.status===422)&&!p.nolist){s.bad.push(model);continue}throw e}
+  const j=await r.json();let out=(j.choices?.[0]?.message?.content||'').replace(/<think>[\s\S]*?<\/think>/g,'').trim();
+  if(!out){s.bad.push(model);if(p.nolist)throw new Error('пустой ответ');continue}
+  s.last=model;return out;
+ }
+ throw new Error('подходящие модели не отвечают');
+}
+async function callRouter(prompt,tier,skip){
+ const order=tier==='strong'?['ovh','kilo','llm7','polli']:['llm7','kilo','polli','ovh'];const errs=[];
+ for(const id of order){const p=KEYLESS.find(x=>x.id===id),s=st(id);if(skip&&skip.includes(id))continue;
+  if(Date.now()<s.until){errs.push(p.name+': пауза');continue}
+  try{const text=await callProvider(p,prompt,tier);s.ok++;s.fails=0;s.err='';s.until=Date.now()+(p.gap||0);rsSave();return {text,provider:p.name,model:s.last,id}}
+  catch(e){s.fails++;s.err=e.message||'ошибка';const base=e.status===429?120000:(e.status>=500||e.name==='AbortError')?300000:600000;s.until=Date.now()+base*Math.min(s.fails,3);rsSave();errs.push(p.name+': '+s.err)}}
+ throw new Error('Бесплатные сервисы сейчас на паузе или недоступны: '+errs.join(' | '));
+}
+function soonest(){const w=KEYLESS.map(p=>st(p.id).until-Date.now()).filter(x=>x>0);return w.length?Math.min(...w):0}
+async function callFreeModel(prompt,skill){
+ let keyed=null;try{keyed=await callKeyedModel(prompt,skill)}catch(e){console.warn('keyed:',e.message)}
+ if(keyed)return keyed;
+ const hard=['coder','android','math','data','security','analyst','researcher'].includes(skill);
+ const tier=skyMode==='fast'?'fast':(skyMode==='max'||hard)?'strong':'fast';
+ let r;
+ try{r=await callRouter(prompt,tier)}catch(e){const w=soonest();if(w>0&&w<=25000){setStatus('жду свободный ИИ…');await new Promise(z=>setTimeout(z,w+300));r=await callRouter(prompt,tier)}else throw e}
+ if(skyMode==='max'){try{setStatus('проверяю ответ…');const c=await callRouter('Ты независимый проверяющий. Ниже вопрос с контекстом и черновик ответа. Найди ошибки, неточности и выдумки, исправь их и верни только итоговый ответ на русском, без пояснений о проверке.\n\nВОПРОС И КОНТЕКСТ:\n'+prompt.slice(-3500)+'\n\nЧЕРНОВИК ОТВЕТА:\n'+r.text,'strong',[r.id]);if(c.text.length>40){r.text=c.text;r.provider+=' + проверка: '+c.provider}}catch{}}
+ const bs=document.getElementById('brainStatus');if(bs)bs.textContent='Отвечает: '+r.provider+' · '+r.model;
+ return {text:r.text,provider:r.provider,model:r.model};
+}
+function showSettings(){
+ const panel=document.createElement('div');panel.className='settings-panel';
+ const card=document.createElement('div');card.className='settings-card';
+ const h=document.createElement('h2');h.textContent='⚙️ Модули Sky';card.append(h);
+ const intro=document.createElement('p');intro.textContent='Подключения и автоматизация. Настройки хранятся в этом браузере.';card.append(intro);
+ const aiTitle=document.createElement('h3');aiTitle.textContent='🧠 Бесплатные ИИ — выбор автоматический';card.append(aiTitle);
+ const aiNote=document.createElement('p');aiNote.className='provider-note';aiNote.textContent='Ключи и вход не нужны. Sky сама выбирает сервис и модель под задачу и режим (Fast / Normal / Max), а при ошибке или лимите ставит сервис на паузу и берёт следующий. Бесплатные сервисы могут менять лимиты и модели без предупреждения, поэтому список моделей Sky запрашивает у них сама. Не отправляй через них конфиденциальные данные.';card.append(aiNote);
+ const stTxt=p=>{const s=st(p.id);if(Date.now()<s.until&&s.err)return '⏸ пауза '+Math.ceil((s.until-Date.now())/1000)+' с · '+s.err;return s.ok?'✅ отвечал · '+s.ok+' раз · '+(s.last||''):(s.err?'❌ '+s.err:'не проверен')};
+ KEYLESS.forEach(p=>{const w=document.createElement('div');w.className='provider-card';const t=document.createElement('b');t.textContent=p.name;const d=document.createElement('div');d.className='sub';d.textContent=stTxt(p);const btn=document.createElement('button');btn.textContent='Проверить';btn.onclick=async()=>{d.textContent='проверяю…';const s=st(p.id);try{if(p.nolist){await callProvider(p,'Ответь одним словом: ок','fast');d.textContent='✅ доступен'}else{const ids=await listModels(p);d.textContent='✅ доступен · моделей: '+ids.length}s.err='';s.until=0;}catch(e){s.err=e.message;d.textContent='❌ '+e.message}rsSave()};w.append(t,d,btn);card.append(w)});
+ const pw=document.createElement('label');pw.className='provider-note';const pc=document.createElement('input');pc.type='checkbox';pc.style.width='auto';pc.style.marginRight='7px';pc.checked=localStorage.getItem('sky_allow_puter')==='1';pc.onchange=()=>{try{localStorage.setItem('sky_allow_puter',pc.checked?'1':'0')}catch{}};pw.append(pc,document.createTextNode('Разрешить Puter как запасной (потребует вход в аккаунт)'));card.append(pw);
+ const mtitle=document.createElement('h3');mtitle.textContent='🔌 MCP — внешние инструменты';card.append(mtitle);
+ const note=document.createElement('p');note.textContent='Добавь адрес своего MCP-сервера (Streamable HTTP). Одного адреса недостаточно для гарантированного подключения: сервер должен разрешать запросы из браузера (CORS), поддерживать MCP и быть доступен по HTTPS. Не вставляй секретные токены в общедоступный телефон.';card.append(note);
+ const name=document.createElement('input');name.placeholder='Название сервера, например Мой MCP';
+ const url=document.createElement('input');url.placeholder='HTTPS URL MCP-сервера';url.inputMode='url';
+ const addServer=document.createElement('button');addServer.textContent='＋ Сохранить сервер';addServer.onclick=()=>{const n=name.value.trim(),u=url.value.trim();if(!n||!/^https:\/\//i.test(u)){alert('Укажи название и HTTPS-адрес сервера.');return;}mcpServers.push({id:Date.now(),name:n,url:u,enabled:true});saveModules();panel.remove();showSettings();};
+ card.append(name,url,addServer);
+ if(!mcpServers.length){const empty=document.createElement('div');empty.className='settings-row';empty.textContent='Пока MCP-серверы не добавлены.';card.append(empty)}
+ mcpServers.forEach((srv,i)=>{const row=document.createElement('div');row.className='settings-row';const t=document.createElement('b');t.textContent=srv.name;const d=document.createElement('div');d.className='sub';d.textContent=srv.url+' · сохранён, не подключён';const del=document.createElement('button');del.textContent='Удалить';del.onclick=()=>{if(confirm('Удалить сервер '+srv.name+' из настроек?')){mcpServers.splice(i,1);saveModules();panel.remove();showSettings();}};row.append(t,d,del);card.append(row)});
+ const atitle=document.createElement('h3');atitle.textContent='⏱️ Автоматизация';card.append(atitle);
+ const anote=document.createElement('p');anote.textContent='Создавай повторяющиеся текстовые задачи. Они запускаются только пока Sky открыт в этой вкладке; перед выполнением Sky попросит подтверждение. Это не фоновая системная автоматизация Android.';card.append(anote);
+ const task=document.createElement('textarea');task.rows=2;task.placeholder='Например: каждый день подготовь краткую сводку моих задач';
+ const mins=document.createElement('select');[[15,'Каждые 15 минут'],[60,'Каждый час'],[360,'Каждые 6 часов'],[1440,'Каждый день']].forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=l;mins.append(o)});
+ const addAuto=document.createElement('button');addAuto.textContent='＋ Добавить автоматизацию';addAuto.onclick=()=>{const t=task.value.trim();if(!t){alert('Сначала напиши задачу.');return;}automations.push({id:Date.now(),task:t,minutes:Number(mins.value),enabled:true,lastRun:0});saveModules();panel.remove();showSettings();};
+ card.append(task,mins,addAuto);
+ if(!automations.length){const empty=document.createElement('div');empty.className='settings-row';empty.textContent='Автоматизаций пока нет.';card.append(empty)}
+ automations.forEach((a,i)=>{const row=document.createElement('div');row.className='settings-row';const t=document.createElement('b');t.textContent=a.task;const d=document.createElement('div');d.className='sub';d.textContent='Интервал: '+a.minutes+' мин · '+(a.enabled?'включена':'выключена');const toggle=document.createElement('button');toggle.textContent=a.enabled?'Выключить':'Включить';toggle.onclick=()=>{a.enabled=!a.enabled;saveModules();panel.remove();showSettings();};const del=document.createElement('button');del.textContent='Удалить';del.onclick=()=>{if(confirm('Удалить эту автоматизацию?')){automations.splice(i,1);saveModules();panel.remove();showSettings();}};row.append(t,d,toggle,del);card.append(row)});
+ const foot=document.createElement('p');foot.textContent='Важно: реальное выполнение MCP-инструментов и фоновые задачи Android потребуют отдельного защищённого сервера/нативного приложения. Сейчас здесь сохраняются настройки и план задач.';card.append(foot);
+ const actions=document.createElement('div');actions.className='settings-actions';const close=document.createElement('button');close.textContent='Закрыть';close.onclick=()=>panel.remove();actions.append(close);card.append(actions);panel.append(card);panel.addEventListener('click',e=>{if(e.target===panel)panel.remove()});document.body.append(panel);
+}
+function startAutomationClock(){
+ automationTimers.forEach(clearInterval);automationTimers=[];
+ const tick=()=>{automations.forEach(a=>{if(!a.enabled||Date.now()-Number(a.lastRun||0)<a.minutes*60000)return;if(!confirm('Sky: запустить автоматизацию?\n\n'+a.task))return;a.lastRun=Date.now();saveModules();input.value='Выполни автоматизацию: '+a.task;ask();});};
+ const timer=setInterval(tick,30000);automationTimers.push(timer);
+}
+document.getElementById('settingsbtn').addEventListener('click',showSettings);
+startAutomationClock();
+async function ask(){const q=input.value.trim();if(!q||send.disabled)return;input.value='';input.style.height='42px';history.push({role:'user',content:q});add('user',q);save();send.disabled=true;setStatus('команда думает…');const wait=add('assistant','Sky думает…');
+try{
+
+const activeAgents=chooseAgents(q);
+let wiki=[];
+if(wantsWiki(q,activeAgents)){
+  setStatus('исследователь ищет источники…');
+  try{wiki=await searchWikipedia(q);}catch{}
+}
+const wikiText=wiki.length?'\n\nСПРАВКА ИЗ РУССКОЙ ВИКИПЕДИИ (используй осторожно, не выдавай её за абсолютную истину):\n'+wiki.map((p,i)=>`${i+1}. ${p.title}\n${p.extract}\nИсточник: ${p.url}`).join('\n\n'):'\n\nЕсли пользователь просит факты, а справки из Википедии нет, честно обозначь, что сейчас не удалось проверить источник.';
+const transcript=history.slice(-12).map(m=>(m.role==='user'?'Пользователь: ':'Sky: ')+m.content).join('\n\n');
+const memoryText=memory.length?'\n\nДОЛГОСРОЧНАЯ ПАМЯТЬ SKY (используй как справочный контекст, проверяй актуальность):\n'+memory.slice(-18).map((m,i)=>`${i+1}. ${m.title||m.query}: ${(m.summary||m.extract||'').slice(0,700)}\nИсточник: ${m.url||'не указан'}`).join('\n\n'):'';
+const prompt='Ты Sky — единый собеседник пользователя. Внутри тебя работает скрытая команда специализированных агентов. Пользователь видит только тебя и один общий ответ. Никогда не показывай список агентов, не говори, что переключаешь режим, и не выдавай внутренние роли за отдельные нейросети.\n\nАВТОМАТИЧЕСКИ ПОДКЛЮЧЁННЫЕ ВНУТРЕННИЕ СПЕЦИАЛИСТЫ:\n'+agentBrief(activeAgents)+'\n\nПусть каждый выбранный специалист мысленно внесёт вклад по своей компетенции. Координатор объединяет их работу, устраняет противоречия, при необходимости использует проверяющего и выдаёт один цельный, естественный ответ. Не нужно описывать внутренние обсуждения. Если задача простая, отвечай кратко и не усложняй.\n\nТы отвечаешь на русском языке. Учитывай контекст диалога. Не выдумывай факты, источники, ссылки или результаты поиска. Если ниже даны статьи Википедии, используй их как справочный контекст и при необходимости укажи ссылки.\n\nИСТОРИЯ ДИАЛОГА:\n'+transcript+memoryText+wikiText+'\n\nДай один готовый ответ пользователю.';
+setStatus(localEngine?'локальный мозг думает…':'Sky распределяет задачу…');
+let answer='',usedModel='';
+const skill=specialistFor(q,activeAgents);
+let freeResult=null;try{freeResult=await callFreeModel(prompt,skill)}catch(e){console.warn('Sky model failover:',e.message)}
+if(freeResult){answer=freeResult.text.trim();usedModel=freeResult.provider+' / '+freeResult.model;}
+else if(localEngine){answer=(await localChat(prompt)).trim();usedModel='локальная модель';}
+else if(localStorage.getItem('sky_allow_puter')==='1'&&window.puter?.ai?.chat){const result=await puter.ai.chat(prompt);answer=responseText(result).trim();usedModel='Puter (модель выбирает сервис)';}
+if(!answer)throw new Error('ИИ вернул пустой ответ. Возможно, все подключённые сервисы временно недоступны.');
+wait.querySelector('.bubble').textContent=answer+'\n\n— Модель: '+usedModel+' · специалист: '+skill;history.push({role:'assistant',content:answer});save();
+if(wiki.length){wiki.forEach(p=>remember({query:q,title:p.title,extract:p.extract,url:p.url,summary:answer.slice(0,1200),kind:'исследование'}));}
+else if(q.length>24 && answer.length>120 && !/^(привет|здравствуй|спасибо|ок|круто)[!. ]*$/i.test(q)){remember({query:q,title:q.slice(0,90),summary:answer.slice(0,1800),kind:'вывод диалога'});}
+setStatus(usedModel?'модель · готов':'на связи');
+}catch(e){const msg=e.name==='AbortError'?'ИИ долго не отвечает. Возможно, сервис перегружен.':(e.message||'Не удалось подключиться. Проверь интернет.');wait.querySelector('.bubble').textContent='Не получилось получить ответ: '+msg+'\n\nПроверь интернет. У бесплатных сервисов есть лимиты, Sky попробует другие чуть позже.';setStatus('нет ответа');}
+finally{send.disabled=false;input.focus();chat.scrollTop=chat.scrollHeight;}}
+send.addEventListener('click',ask);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}});input.addEventListener('input',()=>{input.style.height='42px';input.style.height=Math.min(input.scrollHeight,140)+'px'});
+document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.prompt;ask()}));
+document.getElementById('newchat').addEventListener('click',()=>{history=[];save();chat.innerHTML='';chat.append(welcome);welcome.classList.remove('hidden');setStatus('готов')});render();
+if(!navigator.gpu){document.getElementById('brainStatus').textContent='WebGPU не обнаружен · доступен облачный режим';}
+})();
+</script></body></html>
